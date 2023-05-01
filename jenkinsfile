@@ -82,8 +82,7 @@ pipeline {
                     emailext to: "h07701850@gmail.com",
                               subject: "Deployment Status",
                               body: "Deployment has completed successfully.",
-                              attachmentsPattern: '**/build.log',
-                              debug: true
+                              attachmentsPattern: '**/build.log'
                 }
                 failure {
                     mail to: "h07701850@gmail.com",
