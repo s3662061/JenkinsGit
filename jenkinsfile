@@ -37,8 +37,7 @@ pipeline {
         }
         stage("Security Scan") {
             steps {
-                echo "Run OWASP ZAP to perform a security scan to scan for a variety of vulnerabilities, including cross-site scripting (XSS),
-                SQL injection, and remote file inclusion (RFI)"
+                echo "Run OWASP ZAP to perform a security scan"
                 echo "$SECURITY_SCAN_PATH"
             }
 
