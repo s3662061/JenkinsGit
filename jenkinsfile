@@ -32,6 +32,7 @@ pipeline {
                               subject: "Unit and Integration Test Successfull",
                               body: "Unit and Integration Test has been successfully",
                               attachLog: true
+                }
             }
         }
         stage("Code Analysis") {
