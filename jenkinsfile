@@ -22,10 +22,16 @@ pipeline {
             }
             post {
                 failure {
-                    mail to: "h07701850@gmail.com",
-                    subject: "Code failed in Unit and Integration Test",
-                    body: "Code has failed in Unit and Integration Test stage"  
+                    emailext to: "h07701850@gmail.com",
+                              subject: "Unit and Integration Test Failure",
+                              body: "Code has failed in Unit and Integration Test stage",
+                              attachLog: true
                 }
+                success {
+                    emailext to: "h07701850@gmail.com",
+                              subject: "Unit and Integration Test Successfull",
+                              body: "Unit and Integration Test has been successfully",
+                              attachLog: true
             }
         }
         stage("Code Analysis") {
@@ -43,9 +49,16 @@ pipeline {
 
             post {
                 failure {
-                    mail to: "h07701850@gmail.com",
-                    subject: "Code failed in Security Scan",
-                    body: "Code has failed in Security Scan stage"  
+                    emailext to: "h07701850@gmail.com",
+                              subject: "Security Scan Failure",
+                              body: "Code has failed in Security Scan stage",
+                              attachLog: true
+                }
+                success {
+                    emailext to: "h07701850@gmail.com",
+                              subject: "Security Scan Successfull",
+                              body: "Unit and Integration Test has been successfully",
+                              attachLog: true
                 }
             }
 
@@ -83,11 +96,6 @@ pipeline {
                               subject: "Deployment Status",
                               body: "Deployment has completed successfully.",
                               attachLog: true
-                }
-                failure {
-                    mail to: "h07701850@gmail.com",
-                    subject: "Code failed in Deploy to Production",
-                    body: "Code has failed in Deploy to Production stage"  
                 }
             }
         }
