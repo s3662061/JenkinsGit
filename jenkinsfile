@@ -27,6 +27,13 @@ pipeline {
             steps {
                 echo "deploy the application to a testing environment specified by the environment variable: $TESTING_ENVIRONMENT"
             }
+            post {
+                success {
+                    mail to: "h07701850@gmail.com",
+                    subject: "Test Jenkins Email",
+                    body: "Successful"
+                }
+            }
         }
         stage("Approval") {
             steps {
