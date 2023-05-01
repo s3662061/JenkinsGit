@@ -1,48 +1,94 @@
 pipeline {
     agent any
     environment {
-        DIRECTORY_PATH = "A:/Uni/2023_T1/Professional_Practice/Week_5"
-        TESTING_ENVIRONMENT = "Test-Environment-1"
-        PRODUCTION_ENVIRONMENT = "Anthony"
+        STAGE_ENVIRONMENT = "Anthony_JenkinsGit-staging-server"
+        PRODUCT_ENVIRONMENT = "Anthony_JenkinsGit-production-envir"
+        SONARQUBE = "{properties {property 'sonar.Task6.2C', 'SonarQube Code Analysis'}"
+        SECURITY_SCAN_PATH = "C:/Program Files/OWASP/Zed Attack Proxy> java -jar zap-2.10.0.jar -cmd -quickurl http://localhost:8080/job/JenkinsGit/"
     }
     stages {
         stage("Build") {
             steps {
-                echo "fetch the source code from the directory path specified by the environment variable: $DIRECTORY_PATH"
-                echo "compile the code and generate any necessary artifacts"
+                echo "Build code using Maven to compile and package code"
+                echo "mvn compile package"
             }
         }
-        stage("Test") {
+        stage("Unit and Integration Test") {
             steps {
-                echo "Unit Tests"
-                echo "Integration Tests"
-            }
-        }
-        stage("Code Quality Check") {
-            steps {
-                echo "Checking the quality of the code"
-            }
-        }
-        stage("Deploy") {
-            steps {
-                echo "deploy the application to a testing environment specified by the environment variable: $TESTING_ENVIRONMENT"
+                echo "Run Unit Tests using Junit"
+                echo "mvn test-unit"
+                echo "Run Integration Tests using Jmeter"
+                echo "mvn test-integration"
             }
             post {
-                success {
+                failure {
                     mail to: "h07701850@gmail.com",
-                    subject: "Test Jenkins Email",
-                    body: "Successful"
+                    subject: "Code failed in Unit and Integration Test",
+                    body: "Code has failed in Unit and Integration Test stage"  
                 }
             }
         }
-        stage("Approval") {
+        stage("Code Analysis") {
             steps {
-                sleep 10
+                echo "Run SonarQube code analysis tool to analyse the code and ensure it meets industry standards"
+                echo "mvn sonarqube $SONARQUBE"
+            }
+            
+        }
+        stage("Security Scan") {
+            steps {
+                echo "Run OWASP ZAP to perform a security scan to scan for a variety of vulnerabilities, including cross-site scripting (XSS),
+                 SQL injection, and remote file inclusion (RFI)"
+                echo "$SECURITY_SCAN_PATH"
+            }
+
+            post {
+                failure {
+                    mail to: "h07701850@gmail.com",
+                    subject: "Code failed in Security Scan",
+                    body: "Code has failed in Security Scan stage"  
+                }
+            }
+
+        }
+        stage("Deploy to Staging") {
+            steps {
+                echo "Deploy application to staging server using AWS EC2"
+                echo "arn:aws:s3:::$STAGE_ENVIRONMENT/*"
+            }
+
+        }
+        stage("Integration Tests on Staging") {
+            steps {
+                echo "Run Integration Tests on Staging server using Jmeter"
+                echo "mvn test-integration $STAGE_ENVIRONMENT"
+            }
+
+            post {
+                failure {
+                    emailext attachLog: true, body: '', subject: ''
+                    mail to: "h07701850@gmail.com",
+                    subject: "Code failed in Integration Tests on Staging",
+                    body: "Code has failed in Integration Tests on Staging stage"  
+                }
             }
         }
         stage("Deploy to Production") {
             steps {
-                echo "Deployed code to production environment '$PRODUCTION_ENVIRONMENT'"
+                echo "Deployed code to production environment using AWS EC2 instance"
+                echo "arn:aws:s3::deploy:$STAGE_ENVIRONMENT/*/$PRODUCT_ENVIRONMENT"
+            }
+            post {
+                success {
+                    mail to: "h07701850@gmail.com",
+                    subject: "Code Deployed to Production",
+                    body: "Successful deployment to the production environment"
+                }
+                failure {
+                    mail to: "h07701850@gmail.com",
+                    subject: "Code failed in Deploy to Production",
+                    body: "Code has failed in Deploy to Production stage"  
+                }
             }
         }
     }
