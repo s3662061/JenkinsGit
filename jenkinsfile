@@ -79,7 +79,8 @@ pipeline {
             }
             post {
                 success {
-                    emailext subject: "Deployment Status",
+                    emailext replyTo: "h07701850@gmail.com"
+                              subject: "Deployment Status",
                               body: "Deployment has completed successfully.",
                               attachLog: true
                 }
