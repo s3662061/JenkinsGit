@@ -79,10 +79,9 @@ pipeline {
             }
             post {
                 success {
-                    mail to: "h07701850@gmail.com",
-                    emailext attachLog: true,
-                    subject: "Code Deployed to Production",
-                    body: "Successful deployment to the production environment"
+                    emailext subject: "Deployment Status",
+                              body: "Deployment has completed successfully.",
+                              attachLog: true
                 }
                 failure {
                     mail to: "h07701850@gmail.com",
