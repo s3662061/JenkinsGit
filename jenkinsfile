@@ -29,7 +29,7 @@ pipeline {
                 }
                 success {
                     emailext to: "h07701850@gmail.com",
-                              subject: "Unit and Integration Test Successfull",
+                              subject: "Unit and Integration Test Successful!",
                               body: "Unit and Integration Test has been successfully",
                               attachLog: true
                 }
@@ -57,7 +57,7 @@ pipeline {
                 }
                 success {
                     emailext to: "h07701850@gmail.com",
-                              subject: "Security Scan Successfull",
+                              subject: "Security Scan Successful!",
                               body: "Unit and Integration Test has been successfully",
                               attachLog: true
                 }
