@@ -37,7 +37,8 @@ pipeline {
         }
         stage("Security Scan") {
             steps {
-                echo "Run OWASP ZAP to perform a security scan"
+                echo "Run OWASP ZAP to perform a security scan to scan for a variety of vulnerabilities, including cross-site scripting (XSS),
+                SQL injection, and remote file inclusion (RFI)"
                 echo "$SECURITY_SCAN_PATH"
             }
 
@@ -80,6 +81,7 @@ pipeline {
             post {
                 success {
                     mail to: "h07701850@gmail.com",
+                    emailext attachLog: true,
                     subject: "Code Deployed to Production",
                     body: "Successful deployment to the production environment"
                 }
